@@ -17,7 +17,7 @@ area = [
             "/chengjiao/chaoyang/",
         ]
 trade = [
-            "chaoyang",
+            "朝阳",
         ]
 errorUrl = []
 #筛选数据插入数据库函数
@@ -184,7 +184,11 @@ def getHouseData (_trade, url, page = 1, end = 1):
         'Upgrade-Insecure-Requests':1,
         'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/55.0.2883.87 Chrome/55.0.2883.87 Safari/537.36',
     })
-    data = urllib.request.urlopen(req).read().decode('utf8')
+    try:
+        data = urllib.request.urlopen(req).read().decode('utf8')
+    except Exception as e:
+        print(Exception,":",e)
+        return getHouseData(_trade, url, page + 1)
     #爬取商圈链接加入待爬列表
     if url == 'http://bj.lianjia.com/chengjiao/chaoyang/':
         match = re.findall(r'<a href="(.*)" >(.*)</a>',data)
@@ -193,6 +197,7 @@ def getHouseData (_trade, url, page = 1, end = 1):
             area.append(uri[0])
             trade.append(uri[1])
         area.append("/chengjiao/chaoyang/")
+        trade.append("朝阳")
         return 'false'
     #kaishipipeishuju
     match1 = re.search(r'<ul class="listContent">(.*?)</ul>', data)
@@ -226,3 +231,4 @@ for index,uri in enumerate(area):
 #关闭数据库链接
 cur.close()
 conn.close()
+exit()
