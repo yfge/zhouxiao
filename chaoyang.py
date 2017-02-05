@@ -79,93 +79,102 @@ def procBuilding(_trade, html):
             data_mysql['dealHouseTxt'] = match13.group(1)
         else:
             data_mysql['dealHouseTxt'] = match12.group(1) + ' ' + match12.group(2)
+    # title = data_mysql['title'].split()
+    # if data_mysql['houseInfo'] == " ":
+    #     data_mysql['rowards'] = " "
+    #     data_mysql['renovation'] = " "
+    #     data_mysql['elevator'] = " "
+    # else:
+    #     houseInfo = data_mysql['houseInfo'].split('|')
+    #     if len(houseInfo) == 3:
+    #         data_mysql['rowards'] = houseInfo[0]
+    #         data_mysql['renovation'] = houseInfo[1]
+    #         data_mysql['elevator'] = houseInfo[2]
+    #     elif len(houseInfo) == 2:
+    #         data_mysql['rowards'] = houseInfo[0]
+    #         data_mysql['renovation'] = houseInfo[1]
+    #         data_mysql['elevator'] = " "
+    #     else:
+    #         data_mysql['rowards'] = houseInfo[0]
+    #         data_mysql['renovation'] = " "
+    #         data_mysql['elevator'] = " "
+    # if data_mysql['dealHouseTxt'] == " ":
+    #     data_mysql['ditie'] = " "
+    #     data_mysql['ditiezhan'] = " "
+    #     data_mysql['ditiejianju'] = " "
+    # else:
+    #     dealHouseTxt = data_mysql['dealHouseTxt'].split()
+    #     if len(dealHouseTxt) == 1:
+    #         fangben = re.search(r'房本.*?',dealHouseTxt[0])
+    #         if fangben == None:
+    #             ditie = dealHouseTxt[0].split('号线')
+    #             mi = re.findall(r'(.*?)([0-9]*?)米', ditie[1])
+    #             data_mysql['ditie'] = ditie[0][1:] + '号线'
+    #             data_mysql['ditiezhan'] = mi[0][0]
+    #             data_mysql['ditiejianju'] = mi[0][1]
+    #         else:
+    #             data_mysql['zhengce'] = fangben.group()
+    #             data_mysql['ditie'] = " "
+    #             data_mysql['ditiezhan'] = " "
+    #             data_mysql['ditiejianju'] = " "
+    #     else:
+    #         ditie = dealHouseTxt[1].split('号线')
+    #         mi = re.findall(r'(.*?)([0-9]*?)米',ditie[1])
+    #         data_mysql['zhengce'] = dealHouseTxt[0]
+    #         data_mysql['ditie'] = ditie[0][1:] + '号线'
+    #         data_mysql['ditiezhan'] = mi[0][0]
+    #         data_mysql['ditiejianju'] = mi[0][1]
+    # if data_mysql['positionInfo'] == " ":
+    #     data_mysql['buildings'] = " "
+    #     data_mysql['age'] = " "
+    #     data_mysql['number'] = " "
+    # else:
+    #     positionInfo = data_mysql['positionInfo'].split()
+    #     if len(positionInfo) == 1:
+    #         louceng = re.search(r'楼层',positionInfo[0])
+    #         louceng2 = re.search(r'地下',positionInfo[0])
+    #         if louceng == None and louceng2 == None:
+    #             age = positionInfo[0].split('建')
+    #         elif louceng2 == None or louceng == None:
+    #             data_mysql['number'] = positionInfo[0]
+    #     else:
+    #         data_mysql['number'] = positionInfo[0]
+    #         age = positionInfo[1].split('建')
+    #         if len(age) == 1:
+    #             data_mysql['buildings'] = age[0]
+    #             data_mysql['age'] = " "
+    #         else:
+    #             data_mysql['age'] = age[0]
+    #             data_mysql['buildings'] = age[1]
+    # data_mysql['compound'] = title[0]
+    # data_mysql['layout'] = title[1]
+    # data_mysql['space'] = title[2]
+    # data_mysql['area'] = '朝阳'
+    # data_mysql['trade'] = _trade
     cols = ""
     vals = ""
     for key, value in data_mysql.items():
         cols = cols + "`" + key + "`,"
         vals = vals + "'" + value + "',"
         # print (key,'corresponds to', value)
-    sql = "select id from kk_house where `sourceid` = '" + str(data_mysql['sourceId']) + "'"
-    title = data_mysql['title'].split()
-    if data_mysql['houseInfo'] == " ":
-        data_mysql['rowards'] = " "
-        data_mysql['renovation'] = " "
-        data_mysql['elevator'] = " "
-    else:
-        houseInfo = data_mysql['houseInfo'].split('|')
-        if len(houseInfo) == 3:
-            data_mysql['rowards'] = houseInfo[0]
-            data_mysql['renovation'] = houseInfo[1]
-            data_mysql['elevator'] = houseInfo[2]
-        elif len(houseInfo) == 2:
-            data_mysql['rowards'] = houseInfo[0]
-            data_mysql['renovation'] = houseInfo[1]
-            data_mysql['elevator'] = " "
-        else:
-            data_mysql['rowards'] = houseInfo[0]
-            data_mysql['renovation'] = " "
-            data_mysql['elevator'] = " "
-    if data_mysql['dealHouseTxt'] == " ":
-        data_mysql['ditie'] = " "
-        data_mysql['ditiezhan'] = " "
-        data_mysql['ditiejianju'] = " "
-    else:
-        dealHouseTxt = data_mysql['dealHouseTxt'].split()
-        if len(dealHouseTxt) == 1:
-            fangben = re.search(r'房本.*?',dealHouseTxt[0])
-            if fangben == None:
-                ditie = dealHouseTxt[0].split('号线')
-                mi = re.findall(r'(.*?)([0-9]*?)米', ditie[1])
-                data_mysql['ditie'] = ditie[0][1:] + '号线'
-                data_mysql['ditiezhan'] = mi[0][0]
-                data_mysql['ditiejianju'] = mi[0][1]
-            else:
-                data_mysql['zhengce'] = fangben.group()
-                data_mysql['ditie'] = " "
-                data_mysql['ditiezhan'] = " "
-                data_mysql['ditiejianju'] = " "
-        else:
-            ditie = dealHouseTxt[1].split('号线')
-            mi = re.findall(r'(.*?)([0-9]*?)米',ditie[1])
-            data_mysql['zhengce'] = dealHouseTxt[0]
-            data_mysql['ditie'] = ditie[0][1:] + '号线'
-            data_mysql['ditiezhan'] = mi[0][0]
-            data_mysql['ditiejianju'] = mi[0][1]
-    if data_mysql['positionInfo'] == " ":
-        data_mysql['buildings'] = " "
-        data_mysql['age'] = " "
-        data_mysql['number'] = " "
-    else:
-        positionInfo = data_mysql['positionInfo'].split()
-        if len(positionInfo) == 1:
-            louceng = re.search(r'楼层',positionInfo[0])
-            louceng2 = re.search(r'地下',positionInfo[0])
-            if louceng == None and louceng2 == None:
-                age = positionInfo[0].split('建')
-            elif louceng2 == None or louceng == None:
-                data_mysql['number'] = positionInfo[0]
-        else:
-            data_mysql['number'] = positionInfo[0]
-            age = positionInfo[1].split('建')
-            if len(age) == 1:
-                data_mysql['buildings'] = age[0]
-                data_mysql['age'] = " "
-            else:
-                data_mysql['age'] = age[0]
-                data_mysql['buildings'] = age[1]
-    data_mysql['compound'] = title[0]
-    data_mysql['layout'] = title[1]
-    data_mysql['space'] = title[2]
-    data_mysql['area'] = '朝阳'
-    data_mysql['trade'] = _trade
-    cur.execute(sql)
-    result = cur.fetchone()
-    if result != None:
+    try:
+        sql = "select id from kk_house where `sourceid` = '" + str(data_mysql['sourceId']) + "'"
+        cur.execute(sql)
+        result = cur.fetchone()
+        if result != None:
+            return 'false'
+    except Exception as e:
+        print(Exception, ":", e)
         return 'false'
-    sql = "insert into kk_house (%s) values(%s)" % (cols[:-1], vals[:-1])
-    cur.execute(sql)
-    conn.commit()
-    print('插入成功')
+    try:
+        sql = "insert into kk_house (%s) values(%s)" % (cols[:-1], vals[:-1])
+        res = cur.execute(sql)
+        print(res)
+        conn.commit()
+        print('插入成功')
+    except Exception as e:
+        print(Exception,":",e)
+        return 'false'
 
 #递归爬链接函数
 def getHouseData (_trade, url, page = 1, end = 1):
