@@ -197,7 +197,12 @@ def getHouseData (_trade, url, endurl, page = 1, end = 1):
         data = urllib.request.urlopen(req).read().decode('utf8')
     except Exception as e:
         print(Exception,":",e)
-        return getHouseData(_trade, url, 2, page + 1)
+        time.sleep(60)
+        return getHouseData(_trade, url, 2, page, end + 1)
+        if end > 3:
+            errorUrl.append(pgurl)
+            time.sleep(60)
+            return getHouseData(_trade, url, 2, page)
     #爬取商圈链接加入待爬列表
     if endurl == 0:
         match = re.findall(r'<a href="(.*)" >(.*)</a>',data)

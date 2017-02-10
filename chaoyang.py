@@ -177,7 +177,7 @@ def procBuilding(_trade, html):
         return 'false'
 
 #递归爬链接函数
-def getHouseData (_trade, url, page = 1, end = 1):
+def getHouseData (_trade, url, endurl, page = 1, end = 1):
     pgurl = url if page == 1  else url+'pg'+str(page)+'/' #拼接url
     print(pgurl)
     #最多爬取100页，然后下一个链接
@@ -197,9 +197,14 @@ def getHouseData (_trade, url, page = 1, end = 1):
         data = urllib.request.urlopen(req).read().decode('utf8')
     except Exception as e:
         print(Exception,":",e)
-        return getHouseData(_trade, url, page + 1)
+        time.sleep(60)
+        return getHouseData(_trade, url, 2, page, end + 1)
+        if end > 3:
+            errorUrl.append(pgurl)
+            time.sleep(60)
+            return getHouseData(_trade, url, 2, page)
     #爬取商圈链接加入待爬列表
-    if url == 'http://bj.lianjia.com/chengjiao/chaoyang/':
+    if endurl == 0:
         match = re.findall(r'<a href="(.*)" >(.*)</a>',data)
         match = match[2:-1]
         for uri in match:
@@ -217,7 +222,7 @@ def getHouseData (_trade, url, page = 1, end = 1):
             print(pgurl+'没有ul')
             return 'false'
         time.sleep(15)
-        return getHouseData(_trade, url, page, end + 1)
+        return getHouseData(_trade, url, 2, page, end + 1)
     match2 = re.findall(r'<li>(.*?)</li>', match1.group(1))
     if match2 == None:
         print(pgurl+'没有li')
@@ -230,11 +235,11 @@ def getHouseData (_trade, url, page = 1, end = 1):
             continue
     #30秒后爬取下一页数据
     time.sleep(30)
-    return getHouseData(_trade, url, page + 1)
+    return getHouseData(_trade, url, 2, page + 1)
 
 #循环爬取列表进行爬取
 for index,uri in enumerate(area):
-    ret = getHouseData(trade[index],host+uri)
+    ret = getHouseData(trade[index],host+uri,index)
     if ret == 'false':
         continue
 #关闭数据库链接
